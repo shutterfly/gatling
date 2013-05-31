@@ -25,7 +25,7 @@ object CookieJar {
 
 	// rfc6265#section-5.1.3.
 	def domainMatches(domain: String, host: String): Boolean = {
-		if (host == domain) {
+		if (domain == null || host == domain) {
 			true
 		} else if (host.length > domain.length) {
 			host.endsWith(domain) &&
@@ -47,6 +47,7 @@ private[cookie] class CookieJar(store: Map[URI, List[Cookie]]) {
 	import CookieJar.domainMatches
 
 	private val MAX_AGE_UNSPECIFIED = -1L
+  private val DOMAIN_UNSPECIFIED = ""
 
 	private def getEffectiveUri(uri: URI) =
 		new URI(null, // scheme
@@ -59,7 +60,7 @@ private[cookie] class CookieJar(store: Map[URI, List[Cookie]]) {
 		// rfc6265#section-5.2.3  Let cookie-domain be the attribute-value without the leading %x2E (".") character.
 		.map(dom => if (dom.startsWith(".")) dom.substring(1).toLowerCase else dom.toLowerCase)
 		// rfc6265#section-1 Cookies for a given host are shared  across all the ports on that host
-		.getOrElse(rawURI.getHost)
+		.getOrElse(DOMAIN_UNSPECIFIED)
 
 	/**
 	 * @param uri       the uri this cookie associated with.
@@ -81,7 +82,16 @@ private[cookie] class CookieJar(store: Map[URI, List[Cookie]]) {
 			cookie => domainMatches(cookie.getDomain, rawURI.getHost)
 		}
 
-		def cookiesEquals(c1: Cookie, c2: Cookie) = c1.getName.equalsIgnoreCase(c2.getName) && c1.getDomain.equalsIgnoreCase(c2.getDomain) && c1.getPath == c2.getPath
+		def cookiesEquals(c1: Cookie, c2: Cookie) = {
+
+      if(c1 == null && c2 ==null ){
+        true
+      } else if (c1 != null && c1.compareTo(c2) == 0){
+        true
+      } else {
+        false
+      }
+    }
 
 		@tailrec
 		def addOrReplaceCookies(newCookies: List[Cookie], oldCookies: List[Cookie]): List[Cookie] = newCookies match {

@@ -119,12 +119,10 @@ class CookieJarSpec extends Specification {
 			storedCookies2.head.getValue must beEqualTo("VALUE2")
 		}
 
-		"handle missing domain as request host" in {
+		"cookie domain is null when missing from a response" in {
 			val cookies = decode("ALPHA=VALUE1; Path=/").toList
-			val uri = new URI("http://www.foo.com")
-			val cookieStore = CookieJar(uri, cookies)
 
-			cookieStore.get(new URI("http://www.foo.com")).length must beEqualTo(1)
+      cookies.head.getDomain must beNull
 		}
 
 		"return the cookie when it's issued from a request with a subpath" in {
