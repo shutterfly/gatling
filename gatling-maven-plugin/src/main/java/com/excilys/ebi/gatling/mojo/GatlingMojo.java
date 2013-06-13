@@ -142,6 +142,14 @@ public class GatlingMojo extends AbstractMojo {
 	 */
 	private List<String> jvmArgs;
 
+    /**
+     * Set extra JVM arguments to pass when running Gatling.
+     * @param jvmArgs
+     */
+    public void setJvmArgs(List<String> jvmArgs){
+        this.jvmArgs = jvmArgs;
+    }
+
 	/**
 	 * Forks the execution of Gatling plugin into a separate JVM.
 	 * 
@@ -262,10 +270,12 @@ public class GatlingMojo extends AbstractMojo {
 		return MainHelper.toMultiPath(testClasspathElements);
 	}
 
-	private List<String> jvmArgs() {
-		List<String> jvmArguments = (jvmArgs != null) ? jvmArgs : new ArrayList<String>();
-		jvmArguments.addAll(Arrays.asList(JVM_ARGS));
-		return jvmArguments;
+	protected List<String> jvmArgs() {
+        List<String> args = new ArrayList<String>(Arrays.asList(JVM_ARGS));
+        if(jvmArgs != null){
+            args.addAll(jvmArgs);
+        }
+		return args;
 	}
 
 	private List<String> gatlingArgs() throws Exception {
