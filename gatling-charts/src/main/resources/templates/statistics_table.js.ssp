@@ -13,24 +13,46 @@ function generateHtmlRow(request, level, index, parent, group) {
 	else
 		var expandButtonStyle = ' hidden';
 
-	return '<tr id="' + request.pathFormatted + '" class="child-of-' + parent + '"> \
-		<td class="total col-1"> \
-			<span id="' + request.pathFormatted + '" style="margin-left: ' + (level * 10) + 'px;" class="expand-button' + expandButtonStyle + '">&nbsp;</span> \
-			<a href="' + url +'">' + request.name + '</a><span class="value" style="display:none;">' + index + '</span> \
-		</td> \
-		<td></td> \
-		<td class="value total col-2">' + request.stats.numberOfRequests.total + '</td> \
-		<td class="value ok col-3">' + request.stats.numberOfRequests.ok + '</td> \
-		<td class="value ko col-4">' + request.stats.numberOfRequests.ko + '</td> \
-		<td></td> \
-		<td class="value total col-5">' + request.stats.minResponseTime.total + '</td> \
-		<td class="value total col-6">' + request.stats.maxResponseTime.total + '</td> \
-		<td class="value total col-7">' + request.stats.meanResponseTime.total + '</td> \
-		<td class="value total col-8">' + request.stats.standardDeviation.total + '</td> \
-		<td class="value total col-9">' + request.stats.percentiles1.total + '</td> \
-		<td class="value total col-10">' + request.stats.percentiles2.total + '</td> \
-		<td class="value total col-11">' + request.stats.meanNumberOfRequestsPerSecond.total + '</td> \
-		</tr>';
+
+	if (group)
+	    return '<tr id="' + request.pathFormatted + '" class="child-of-' + parent + '"> \
+                    <td class="total col-1"> \
+                        <span id="' + request.pathFormatted + '" style="margin-left: ' + (level * 10) + 'px;" class="expand-button' + expandButtonStyle + '">&nbsp;</span> \
+                        ' + request.name + '<span class="value" style="display:none;">' + index + '</span> \
+                    </td> \
+                    <td></td> \
+                    <td class="value total col-2">' + "*" + '</td> \
+                    <td class="value ok col-3">' + "*" + '</td> \
+                    <td class="value ko col-4">' + "*" + '</td> \
+                    <td></td> \
+                    <td class="value total col-5">' + "*" + '</td> \
+                    <td class="value total col-6">' + "*" + '</td> \
+                    <td class="value total col-7">' + "*" + '</td> \
+                    <td class="value total col-8">' + "*" + '</td> \
+                    <td class="value total col-9">' + "*" + '</td> \
+                    <td class="value total col-10">' + "*" + '</td> \
+                    <td class="value total col-11">' + "*" + '</td> \
+                    </tr>';
+
+	else
+        return '<tr id="' + request.pathFormatted + '" class="child-of-' + parent + '"> \
+            <td class="total col-1"> \
+                <span id="' + request.pathFormatted + '" style="margin-left: ' + (level * 10) + 'px;" class="expand-button' + expandButtonStyle + '">&nbsp;</span> \
+                <a href="' + url +'">' + request.name + '</a><span class="value" style="display:none;">' + index + '</span> \
+            </td> \
+            <td></td> \
+            <td class="value total col-2">' + request.stats.numberOfRequests.total + '</td> \
+            <td class="value ok col-3">' + request.stats.numberOfRequests.ok + '</td> \
+            <td class="value ko col-4">' + request.stats.numberOfRequests.ko + '</td> \
+            <td></td> \
+            <td class="value total col-5">' + request.stats.minResponseTime.total + '</td> \
+            <td class="value total col-6">' + request.stats.maxResponseTime.total + '</td> \
+            <td class="value total col-7">' + request.stats.meanResponseTime.total + '</td> \
+            <td class="value total col-8">' + request.stats.standardDeviation.total + '</td> \
+            <td class="value total col-9">' + request.stats.percentiles1.total + '</td> \
+            <td class="value total col-10">' + request.stats.percentiles2.total + '</td> \
+            <td class="value total col-11">' + request.stats.meanNumberOfRequestsPerSecond.total + '</td> \
+            </tr>';
 }
 
 function generateHtmlRowsForGroup(group, level, index, parent) {
