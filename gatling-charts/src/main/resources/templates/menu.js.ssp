@@ -41,7 +41,7 @@ function menuItem(item, level, parent, group) {
 		var expandButton = '<span id="menu-' + item.pathFormatted + '" style="margin-left: ' + (level * 10) + 'px;" class="expand-button hidden">&nbsp;</span>';
 
 	if (group)
-	    return '<li' + style + '><div class="item">' + expandButton + displayName + '</a></div></li>';
+	    return '<li' + style + '><div class="item">' + expandButton + displayName + '</div></li>';
 	else
 	    return '<li' + style + '><div class="item">' + expandButton + '<a href="' + getItemLink(item) + '"' + title + '>' + displayName + '</a></div></li>';
 }
