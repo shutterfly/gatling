@@ -116,9 +116,14 @@ object Assertion {
 }
 
 class Assertion(assertion: (DataReader) => Boolean, message: (Boolean) => String) {
+	private var _generatedMessage:String = ""
+
 	def apply(reader: DataReader) = {
 		val result = assertion(reader)
-		println(message(result))
+		_generatedMessage = message(result)
+		println(_generatedMessage)
 		result
-	}
+  }
+
+	def assertionMessage = _generatedMessage
 }
