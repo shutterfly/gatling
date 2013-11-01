@@ -1,7 +1,7 @@
 <% import scala.collection.mutable.{LinkedHashSet, HashMap} %>
 <% import com.excilys.ebi.gatling.charts.report.{TestSuite,TestCase} %>
 <%@ val testsuite: TestSuite %>
-<testsuite errors="0" failures="<%=testsuite.failureCount%>" name="<%=testsuite.tsname%>" tests=""<%=testsuite.tcList.count%>"" time="0">
+<testsuite errors="0" failures="<%=testsuite.failureCount%>" name="<%=testsuite.tsname%>" tests="<%=testsuite.tcList.size%>" time="0">
 <% val it = testsuite.tcList.iterator %>
 <% while (it.hasNext) { %>
 <% val tc:TestCase = it.next %>
