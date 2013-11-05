@@ -74,7 +74,8 @@ object GatlingConfiguration extends Logging {
 					sources = config.getString(CONF_CORE_DIRECTORY_SIMULATIONS),
 					binaries = trimToOption(config.getString(CONF_CORE_DIRECTORY_BINARIES)),
 					reportsOnly = trimToOption(config.getString(CONF_CORE_DIRECTORY_REPORTS_ONLY)),
-					results = config.getString(CONF_CORE_DIRECTORY_RESULTS))),
+					results = config.getString(CONF_CORE_DIRECTORY_RESULTS),
+					jUnitReports = trimToOption(config.getString(CONF_CORE_DIRECTORY_JUNIT_REPORTS)))),
 			charting = ChartingConfiguration(
 				noReports = config.getBoolean(CONF_CHARTING_NO_REPORTS),
 				noAssertionReports = config.getBoolean(CONF_CHARTING_ASSERTION_REPORTS),
@@ -191,7 +192,8 @@ case class DirectoryConfiguration(
 	sources: String,
 	binaries: Option[String],
 	reportsOnly: Option[String],
-	results: String)
+	results: String,
+	jUnitReports: Option[String])
 
 case class ChartingConfiguration(
 	noReports: Boolean,

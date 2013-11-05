@@ -104,7 +104,7 @@ class JunitAssertionReportGenerator(runOn: String, dataReader: DataReader, asser
 
 			val testCases = assertions.foldLeft[LinkedHashSet[TestCase]](LinkedHashSet[TestCase]())(generateTestCase)
 			val testsuite = new TestSuite(dataReader.scenarioNames.mkString,testCases)
-			new TemplateWriter(junitAssertionFile(runOn)).writeToFile(new JunitAssertionTemplate(testsuite).getOutput)
+			new TemplateWriter(jUnitAssertionFile).writeToFile(new JunitAssertionTemplate(testsuite).getOutput)
   }
 
 }

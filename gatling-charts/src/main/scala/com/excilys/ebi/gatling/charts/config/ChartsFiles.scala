@@ -18,7 +18,7 @@ package com.excilys.ebi.gatling.charts.config
 import scala.tools.nsc.io.Path
 import scala.tools.nsc.io.Path.string2path
 
-import com.excilys.ebi.gatling.core.config.GatlingFiles.{ GATLING_JS, resultDirectory }
+import com.excilys.ebi.gatling.core.config.GatlingFiles.{ GATLING_JS, resultDirectory, jUnitReportsDirectory }
 import com.excilys.ebi.gatling.core.util.FileHelper.requestFileName
 
 object ChartsFiles {
@@ -59,6 +59,6 @@ object ChartsFiles {
 
 	def tsvStatsFile(runOn: String): Path = resultDirectory(runOn) / STATS_TSV_FILE
 
-	def junitAssertionFile(runOn: String): Path = resultDirectory(runOn) / JUNIT_XML_FILE
+	def jUnitAssertionFile: Path = jUnitReportsDirectory / JUNIT_XML_FILE
 
 }

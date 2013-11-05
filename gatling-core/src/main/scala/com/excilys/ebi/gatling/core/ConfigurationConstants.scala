@@ -36,6 +36,7 @@ object ConfigurationConstants {
 	val CONF_CORE_DIRECTORY_BINARIES = "gatling.core.directory.binaries"
 	val CONF_CORE_DIRECTORY_REPORTS_ONLY = "gatling.core.directory.reportsOnly"
 	val CONF_CORE_DIRECTORY_RESULTS = "gatling.core.directory.results"
+	val CONF_CORE_DIRECTORY_JUNIT_REPORTS = "gatling.core.directory.jUnitReports"
 
 	val CONF_CHARTING_NO_REPORTS = "gatling.charting.noReports"
 	val CONF_CHARTING_ASSERTION_REPORTS = "gatling.charting.noAssertionReports"

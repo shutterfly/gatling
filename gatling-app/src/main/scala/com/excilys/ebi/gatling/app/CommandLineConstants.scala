@@ -25,6 +25,8 @@ object CommandLineConstants {
 	val CLI_DATA_FOLDER_ALIAS = "data-folder"
 	val CLI_RESULTS_FOLDER = "rf"
 	val CLI_RESULTS_FOLDER_ALIAS = "results-folder"
+	val CLI_JUNIT_REPORTS_FOLDER = "rp"
+	val CLI_JUNIT_REPORTS_FOLDER_ALIAS = "junit-reports-folder"
 	val CLI_REQUEST_BODIES_FOLDER = "bf"
 	val CLI_REQUEST_BODIES_FOLDER_ALIAS = "request-bodies-folder"
 	val CLI_SIMULATIONS_FOLDER = "sf"

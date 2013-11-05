@@ -33,6 +33,8 @@ class GatlingPropertiesBuilder {
 
 	def resultsDirectory(v: String) { props.put(CONF_CORE_DIRECTORY_RESULTS, v) }
 
+	def jUnitAssertReports(v: String) { props.put(CONF_CORE_DIRECTORY_JUNIT_REPORTS, v) }
+
 	def requestBodiesDirectory(v: String) { props.put(CONF_CORE_DIRECTORY_REQUEST_BODIES, v) }
 
 	def sourcesDirectory(v: String) { props.put(CONF_CORE_DIRECTORY_SIMULATIONS, v) }

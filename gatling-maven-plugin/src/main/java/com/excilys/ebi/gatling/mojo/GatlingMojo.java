@@ -41,7 +41,7 @@ import static org.codehaus.plexus.util.StringUtils.trim;
 /**
  * Mojo to execute Gatling.
  * 
- * @goal execute
+ * @goal integration-test
  * @phase integration-test
  * @description Gatling Maven Plugin
  * @requiresDependencyResolution test
@@ -54,6 +54,12 @@ public class GatlingMojo extends AbstractMojo {
 	public static final String[] JVM_ARGS = new String[] { "-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M", "-Xss2M", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts", "-XX:+OptimizeStringConcat",
 			"-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC", "-XX:+UseConcMarkSweepGC", "-XX:+CMSParallelRemarkEnabled", "-XX:+CMSClassUnloadingEnabled", "-XX:CMSInitiatingOccupancyFraction=75", "-XX:+UseCMSInitiatingOccupancyOnly", "-XX:SurvivorRatio=8",
 			"-XX:MaxTenuringThreshold=1" };
+
+    /**
+     * @parameter expression="${gatling.reportFolder}" alias="nr" default-value="${basedir}/target/gatling"
+     * @description Location of the gatling assertion results (in junit compatible format)
+     */
+    private File reportsDirectory;
 
 	/**
 	 * Runs simulation but does not generate reports. By default false.
@@ -223,6 +229,7 @@ public class GatlingMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException {
 		// Create results directories
 		resultsFolder.mkdirs();
+        reportsDirectory.mkdirs();
 		try {
 			executeGatling(jvmArgs().toArray(new String[0]), gatlingArgs().toArray(new String[0]));
 		} catch (Exception e) {
@@ -300,6 +307,7 @@ public class GatlingMojo extends AbstractMojo {
 		List<String> args = new ArrayList<String>();
 		args.addAll(asList("-" + CommandLineConstants.CLI_DATA_FOLDER(), dataFolder.getCanonicalPath(),//
 				"-" + CommandLineConstants.CLI_RESULTS_FOLDER(), resultsFolder.getCanonicalPath(),// ;
+                "-" + CommandLineConstants.CLI_JUNIT_REPORTS_FOLDER(), reportsDirectory.getCanonicalPath(),
 				"-" + CommandLineConstants.CLI_REQUEST_BODIES_FOLDER(), requestBodiesFolder.getCanonicalPath(),//
 				"-" + CommandLineConstants.CLI_SIMULATIONS_FOLDER(), simulationsFolder.getCanonicalPath(),//
 				"-" + CommandLineConstants.CLI_SIMULATION(), simulationClass));

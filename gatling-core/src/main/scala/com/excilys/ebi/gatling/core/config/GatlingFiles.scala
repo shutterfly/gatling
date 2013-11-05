@@ -40,6 +40,13 @@ object GatlingFiles {
 	def reportsOnlyDirectory: Option[String] = configuration.core.directory.reportsOnly
 	def binariesDirectory: Option[Directory] = configuration.core.directory.binaries.map(_.toDirectory)
 	def resultDirectory(runUuid: String): Path = resultsRootDirectory / runUuid
+	def jUnitReportsDirectory: Path = {
+		val jUnitReportsOpt = configuration.core.directory.jUnitReports
+		if(jUnitReportsOpt.isEmpty)
+			resultsRootDirectory
+		else
+			resolvePath(jUnitReportsOpt.get)
+	}
 	def jsDirectory(runUuid: String): Path = resultDirectory(runUuid) / GATLING_JS
 	def styleDirectory(runUuid: String): Path = resultDirectory(runUuid) / GATLING_STYLE
 	def simulationLogDirectory(runUuid: String, create: Boolean = true): Directory = {
