@@ -41,7 +41,7 @@ import static org.codehaus.plexus.util.StringUtils.trim;
 /**
  * Mojo to execute Gatling.
  * 
- * @goal integration-test
+ * @goal execute
  * @phase integration-test
  * @description Gatling Maven Plugin
  * @requiresDependencyResolution test
