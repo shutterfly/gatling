@@ -80,13 +80,13 @@ class JunitAssertionReportGenerator(runOn: String, dataReader: DataReader, asser
  		def generateActualNumber(requestName: Option[String], group: Option[Group], assertionItem:String) : String = {
 
 			val total = dataReader.generalStats(None, requestName, group)
-			val ko = dataReader.generalStats(Some(KO), requestName, group)
+			val ok = dataReader.generalStats(Some(OK), requestName, group)
 
       assertionItem match {
 				case `assertionPercentile1` => total.percentile1.toString
 				case `assertionPercentile2` => total.percentile2.toString
 				case `assertionThroughput` => total.meanRequestsPerSec.toString
-				case `assertionPercentageKO` => if (total.count != 0) (ko.count/total.count).toString else ""
+				case `assertionPercentageKO` => if (total.count != 0) "%.2f".format(((total.count - ok.count).toFloat/total.count)*100) else ""
 				case `assertionMean` => total.mean.toString
 				case _ => "";
       }
