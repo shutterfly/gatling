@@ -31,7 +31,8 @@ object ChartsFiles {
 	val STATS_JSON_FILE = "global_stats.json"
 	val STATS_TSV_FILE = "stats.tsv"
 	val GLOBAL_PAGE_NAME = "Global Information"
-	val JUNIT_XML_FILE = "junit_assertion.xml"
+	val ASSERTION_JUNIT_XML_FILE = "junit_assertion.xml"
+	val ASSERTION_TSV_FILE = "assertion.tsv"
 
 	val GATLING_TEMPLATE = "templates/"
 	val GATLING_TEMPLATE_STATISTICS_COMPONENT_URL = GATLING_TEMPLATE + "statistics_component.html.ssp"
@@ -43,7 +44,8 @@ object ChartsFiles {
 	val GATLING_TEMPLATE_STATS_TSV_FILE_URL = GATLING_TEMPLATE + "stats.tsv.ssp"
 	val GATLING_TEMPLATE_STATISTICS_TABLE_HTML_TEMPLATE_URL = GATLING_TEMPLATE + "statistics_table.html.ssp"
 	val GATLING_TEMPLATE_STATISTICS_TABLE_JS_TEMPLATE_URL = GATLING_TEMPLATE + "statistics_table.js.ssp"
-	val GATLING_TEMPLATE_JUNIT_ASSERTION_FILE_URL = GATLING_TEMPLATE + "junit_assertion.xml.ssp"
+	val GATLING_TEMPLATE_ASSERTION_JUNIT_FILE_URL = GATLING_TEMPLATE + "junit_assertion.xml.ssp"
+	val GATLING_TEMPLATE_ASSERTION_TSV_FILE_URL = GATLING_TEMPLATE + "assertion.tsv.ssp"
 
 	def menuFile(runOn: String): Path = resultDirectory(runOn) / GATLING_JS / MENU_FILE
 
@@ -59,6 +61,8 @@ object ChartsFiles {
 
 	def tsvStatsFile(runOn: String): Path = resultDirectory(runOn) / STATS_TSV_FILE
 
-	def jUnitAssertionFile: Path = jUnitReportsDirectory / JUNIT_XML_FILE
+	def jUnitAssertionFile: Path = jUnitReportsDirectory / ASSERTION_JUNIT_XML_FILE
+
+	def tsvAssertionFile(runOn: String): Path = resultDirectory(runOn) / ASSERTION_TSV_FILE
 
 }

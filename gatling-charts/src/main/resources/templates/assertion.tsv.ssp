@@ -1,0 +1,9 @@
+<% import scala.collection.mutable.{LinkedHashSet, HashMap} %>
+<% import com.excilys.ebi.gatling.charts.report.{TestSuite,TestCase} %>
+ScenarioName	RequestName	AssertionName	Type	ActualNumber	ExpectedNumber	Result
+<%@ val testsuite: TestSuite %>
+<% val it = testsuite.tcList.iterator %>
+<% while (it.hasNext) { %>
+<% val tc:TestCase = it.next %>
+<%=testsuite.tsname%>	<%=tc.tcrequestname%>	<%=tc.tcname%>	<%=tc.tctype%>	<%=tc.tcactualnumber%>	<%=tc.tcassertionnumber%>	<%=tc.tcstatus%>
+<% } %>

@@ -16,11 +16,10 @@
 package com.excilys.ebi.gatling.charts.report
 
 import com.excilys.ebi.gatling.charts.config.ChartsFiles._
-import com.excilys.ebi.gatling.charts.template.JunitAssertionTemplate
+import com.excilys.ebi.gatling.charts.template.{JunitAssertionTemplate,TsvAssertionTemplate}
 import com.excilys.ebi.gatling.core.config.GatlingConfiguration.configuration
 import com.excilys.ebi.gatling.core.result.message.RequestStatus.{ KO, OK }
 import com.excilys.ebi.gatling.core.result.reader.{GeneralStats, DataReader}
-import com.excilys.ebi.gatling.core.result.Group
 import scala._
 import com.excilys.ebi.gatling.core.structure.Assertion
 import scala.collection.mutable.LinkedHashSet
@@ -46,7 +45,7 @@ class TestSuite(scenarioName:String, testCaseList:LinkedHashSet[TestCase]) {
 
 }
 
-class TestCase(msg:String,name:String,status:String,actualNumber:String,assertionItem:String) {
+class TestCase(msg:String,name:String,status:String,actualNumber:String,assertionItem:String,requestName:String,assertionNumber:String) {
 
 	def tcname = name
 
@@ -56,9 +55,15 @@ class TestCase(msg:String,name:String,status:String,actualNumber:String,assertio
 
 	def tctype = assertionItem
 
+	def tcrequestname = requestName
+
+	def tcactualnumber = actualNumber
+
+	def tcassertionnumber = assertionNumber
+
 }
 
-class JunitAssertionReportGenerator(runOn: String, dataReader: DataReader, assertions: Seq[Assertion]) {
+class AssertionReportGenerator(runOn: String, dataReader: DataReader, assertions: Seq[Assertion]) {
 
 	def generateTestCase(testcases:LinkedHashSet[TestCase],assertion:Assertion) : LinkedHashSet[TestCase] ={
 
@@ -94,9 +99,9 @@ class JunitAssertionReportGenerator(runOn: String, dataReader: DataReader, asser
     }
 
     requestName match {
-				case "Global" => testcases += new TestCase(message,tcname,status,generateActualNumber(None,None,assertionItem),assertionItem)
-				case reqPattern(groupName,reqName) => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(reqName),Some(new Group(groupName)),assertionItem),assertionItem)
-				case _ => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(requestName),None,assertionItem),assertionItem)
+				case "Global" => testcases += new TestCase(message,tcname,status,generateActualNumber(None,None,assertionItem),assertionItem,requestName,assertionNumber)
+				case reqPattern(groupName,reqName) => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(reqName),Some(new Group(groupName)),assertionItem),assertionItem,requestName,assertionNumber)
+				case _ => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(requestName),None,assertionItem),assertionItem,requestName,assertionNumber)
     }
   }
 
@@ -105,6 +110,7 @@ class JunitAssertionReportGenerator(runOn: String, dataReader: DataReader, asser
 			val testCases = assertions.foldLeft[LinkedHashSet[TestCase]](LinkedHashSet[TestCase]())(generateTestCase)
 			val testsuite = new TestSuite(dataReader.scenarioNames.mkString,testCases)
 			new TemplateWriter(jUnitAssertionFile).writeToFile(new JunitAssertionTemplate(testsuite).getOutput)
+			new TemplateWriter(tsvAssertionFile(runOn)).writeToFile(new TsvAssertionTemplate(testsuite).getOutput)
   }
 
 }

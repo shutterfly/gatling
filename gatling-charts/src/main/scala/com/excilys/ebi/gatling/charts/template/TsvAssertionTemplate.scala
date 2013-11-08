@@ -15,9 +15,9 @@
  */
 package com.excilys.ebi.gatling.charts.template
 
-import com.excilys.ebi.gatling.charts.config.ChartsFiles.GATLING_TEMPLATE_ASSERTION_JUNIT_FILE_URL
+import com.excilys.ebi.gatling.charts.config.ChartsFiles.GATLING_TEMPLATE_ASSERTION_TSV_FILE_URL
 import com.excilys.ebi.gatling.charts.report.TestSuite
 
-class JunitAssertionTemplate(testsuite : TestSuite) {
-  def getOutput: String = PageTemplate.TEMPLATE_ENGINE.layout(GATLING_TEMPLATE_ASSERTION_JUNIT_FILE_URL, Map("testsuite" -> testsuite))
+class TsvAssertionTemplate(testsuite : TestSuite) {
+  def getOutput: String = PageTemplate.TEMPLATE_ENGINE.layout(GATLING_TEMPLATE_ASSERTION_TSV_FILE_URL, Map("testsuite" -> testsuite))
 }

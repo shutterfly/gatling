@@ -19,7 +19,7 @@ import java.lang.System.currentTimeMillis
 import java.util.{ Map => JMap }
 
 import com.excilys.ebi.gatling.app.CommandLineConstants._
-import com.excilys.ebi.gatling.charts.report.{JunitAssertionReportGenerator, ReportsGenerator}
+import com.excilys.ebi.gatling.charts.report.{AssertionReportGenerator, ReportsGenerator}
 import com.excilys.ebi.gatling.core.config.{ GatlingFiles, GatlingPropertiesBuilder }
 import com.excilys.ebi.gatling.core.config.GatlingConfiguration
 import com.excilys.ebi.gatling.core.result.reader.DataReader
@@ -185,7 +185,7 @@ class Gatling extends Logging {
 		if (successful) println("Simulation successful.")
 		else println("Simulation failed.")
 
-		if (!configuration.charting.noAssertionReports) new JunitAssertionReportGenerator(outputDirectoryName, dataReader, simulation.assertions).generate
+		if (!configuration.charting.noAssertionReports) new AssertionReportGenerator(outputDirectoryName, dataReader, simulation.assertions).generate
 
 		successful
   }
