@@ -25,9 +25,10 @@ import com.excilys.ebi.gatling.core.structure.Assertion
 import scala.collection.mutable.LinkedHashSet
 import com.excilys.ebi.gatling.core.result.Group
 import scala.Some
+import grizzled.slf4j.Logging
 
 
-class TestSuite(scenarioName:String, testCaseList:LinkedHashSet[TestCase]) {
+class TestSuite(scenarioName:String, testCaseList:LinkedHashSet[TestCase]){
 
 	private def accFailedCount(count:Int,testcase:TestCase):Int ={
 		if (testcase.tcstatus) {
@@ -63,7 +64,7 @@ class TestCase(msg:String,name:String,status:String,actualNumber:String,assertio
 
 }
 
-class AssertionReportGenerator(runOn: String, dataReader: DataReader, assertions: Seq[Assertion]) {
+class AssertionReportGenerator(runOn: String, dataReader: DataReader, assertions: Seq[Assertion]) extends Logging {
 
 	def generateTestCase(testcases:LinkedHashSet[TestCase],assertion:Assertion) : LinkedHashSet[TestCase] ={
 
@@ -76,42 +77,58 @@ class AssertionReportGenerator(runOn: String, dataReader: DataReader, assertions
 		val assertionThroughput:String = "requests per second"
 		val assertionPercentageKO:String = "percentage of requests KO"
 		val assertionMean = "mean response time"
+		val assertionMin = "min response time"
+		val assertionMax = "max response time"
+		val assertionStv = "standard deviation response time"
 
-		val msgPattern = """(.*) (%s|%s|%s|%s|%s) is (greater|less) than (\d{1,5}) : (false|true)""".stripMargin.format(assertionPercentile1,assertionPercentile2,assertionThroughput,assertionPercentageKO,assertionMean).r
-		val msgPattern(requestName,assertionItem, assertionOperation, assertionNumber, status) = message
-		val reqPattern = """(.*) / (.*)""".r
-		val tcname = "%s %s is %s than %s".stripMargin.format(requestName,assertionItem,assertionOperation,assertionNumber)
+		val msgPattern = """(.*) (%s|%s|%s|%s|%s|%s|%s|%s) is (greater|less) than (\d{1,5}) : (false|true)""".stripMargin.format(assertionPercentile1,assertionPercentile2,assertionThroughput,assertionPercentageKO,assertionMean,assertionMin,assertionMax,assertionStv).r
+		val nonMatchPattern = """(.*) : (false|true)""".r
 
  		def generateActualNumber(requestName: Option[String], group: Option[Group], assertionItem:String) : String = {
 
 			val total = dataReader.generalStats(None, requestName, group)
 			val ok = dataReader.generalStats(Some(OK), requestName, group)
 
-      assertionItem match {
+			assertionItem match {
 				case `assertionPercentile1` => total.percentile1.toString
 				case `assertionPercentile2` => total.percentile2.toString
 				case `assertionThroughput` => total.meanRequestsPerSec.toString
 				case `assertionPercentageKO` => if (total.count != 0) "%.2f".format(((total.count - ok.count).toFloat/total.count)*100) else ""
 				case `assertionMean` => total.mean.toString
+				case `assertionMin` => total.min.toString
+				case `assertionMax` => total.max.toString
+				case `assertionStv` => total.stdDev.toString
 				case _ => "";
       }
 
     }
 
-    requestName match {
-				case "Global" => testcases += new TestCase(message,tcname,status,generateActualNumber(None,None,assertionItem),assertionItem,requestName,assertionNumber)
-				case reqPattern(groupName,reqName) => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(reqName),Some(new Group(groupName)),assertionItem),assertionItem,requestName,assertionNumber)
-				case _ => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(requestName),None,assertionItem),assertionItem,requestName,assertionNumber)
-    }
+		val reqPattern = """(.*) / (.*)""".r
+		message match {
+					case msgPattern(requestName,assertionItem, assertionOperation, assertionNumber, status) => {
+							val tcname = "%s %s is %s than %s".stripMargin.format(requestName,assertionItem,assertionOperation,assertionNumber)
+							requestName match {
+									case "Global" => testcases += new TestCase(message,tcname,status,generateActualNumber(None,None,assertionItem),assertionItem,requestName,assertionNumber)
+									case reqPattern(groupName,reqName) => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(reqName),Some(new Group(groupName)),assertionItem),assertionItem,requestName,assertionNumber)
+									case _ => testcases += new TestCase(message,tcname,status,generateActualNumber(Some(requestName),None,assertionItem),assertionItem,requestName,assertionNumber)
+							}
+					}
+					case nonMatchPattern(tcname, status) => {
+							testcases += new TestCase(message,tcname,status,"N/A","N/A","N/A","N/A")
+					}
+		}
   }
 
 		def generate{
-
-			val testCases = assertions.foldLeft[LinkedHashSet[TestCase]](LinkedHashSet[TestCase]())(generateTestCase)
-			val testsuite = new TestSuite(dataReader.scenarioNames.mkString,testCases)
-			new TemplateWriter(jUnitAssertionFile).writeToFile(new JunitAssertionTemplate(testsuite).getOutput)
-			new TemplateWriter(tsvAssertionFile(runOn)).writeToFile(new TsvAssertionTemplate(testsuite).getOutput)
-  }
+			try{
+					val testCases = assertions.foldLeft[LinkedHashSet[TestCase]](LinkedHashSet[TestCase]())(generateTestCase)
+					val testsuite = new TestSuite(dataReader.scenarioNames.mkString,testCases)
+					new TemplateWriter(jUnitAssertionFile).writeToFile(new JunitAssertionTemplate(testsuite).getOutput)
+					new TemplateWriter(tsvAssertionFile(runOn)).writeToFile(new TsvAssertionTemplate(testsuite).getOutput)
+			}catch{
+					case e: Exception => logger.error("Error occurred during assertion report generation", e)
+			}
+  	}
 
 }
 
