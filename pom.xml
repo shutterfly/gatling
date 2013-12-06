@@ -28,9 +28,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git@github.com:excilys/gatling.git</connection>
-		<developerConnection>scm:git:git@github.com:excilys/gatling.git</developerConnection>
-		<url>https://github.com/excilys/gatling</url>
+		<connection>git@github.com:shutterfly/gatling-plugin.git</connection>
+		<developerConnection>git@github.com:shutterfly/gatling-plugin.git</developerConnection>
+		<url>http://china.stage.shutterfly.com:2010/job/TRE_com.excilys.ebi.gatling.gatling-parent.reactor-pom/</url>
 		<tag>1.5.2.1</tag>
 	</scm>
 
@@ -112,7 +112,7 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<encoding>UTF-8</encoding>
 		<scala.version>2.9.3</scala.version>
-		<ahc.version>1.7.17-SNAPSHOT</ahc.version>
+		<ahc.version>1.7.17.1</ahc.version>
 		<akka.version>2.0.4</akka.version>
 		<config.version>1.0.0</config.version>
 		<jaxen.version>1.1.6</jaxen.version>
@@ -219,7 +219,7 @@
 			<dependency>
 				<groupId>com.ning</groupId>
 				<artifactId>async-http-client</artifactId>
-				<version>1.7.17.1</version>
+				<version>${ahc.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.netty</groupId>
